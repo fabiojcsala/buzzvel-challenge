@@ -2,6 +2,7 @@ version: '3.1'
 services:
     webserver:
         image: 'nginx:alpine'
+        container_name: 'bc-webserber'
         working_dir: /application
         volumes:
             - './src:/application'
@@ -11,6 +12,7 @@ services:
 
     php-fpm:
         build: php-fpm
+        container_name: 'bc-php'
         working_dir: /application
         volumes:
             - './src:/application'
