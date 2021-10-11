@@ -47,7 +47,7 @@ class SearchController extends Controller
     
         for($i = 0; $i < count($allData); $i++) {
             if($allData[$i][1] != "" && $allData[$i][2] != "" && count($allData[$i]) < 5) {
-                
+
                 $myObj = [
                     "name" => $allData[$i][0],
                     "latitude" => $allData[$i][1],
@@ -64,7 +64,7 @@ class SearchController extends Controller
     }
 
     public function home() {
-        return view('home.index', compact('array'));
+        return view('home.index');
     }
 
     public function search(Request $request) {
