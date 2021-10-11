@@ -55,8 +55,8 @@ class SearchController extends Controller
                     "name" => $allData[$i][0],
                     "latitude" => $allData[$i][1],
                     "longitude" => $allData[$i][2],
-                    "price" => $allData[$i][3],
-                    "distance" => $this->calcDistance($userLati, $userLong, $allData[$i][1], $allData[$i][2])
+                    "price" => number_format($allData[$i][3], 2, ",", "."),
+                    "distance" => number_format(floatval($this->calcDistance($userLati, $userLong, $allData[$i][1], $allData[$i][2])), 3, '.', '')
                 ];
     
                 array_push($myArray, $myObj);
