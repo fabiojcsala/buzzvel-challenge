@@ -25,42 +25,52 @@
             <main>
                 <form method="post" action="{{ route('search.distance') }}">
                     {{ csrf_field() }}
-                    <div class="mb-3">
-                        <label class="form-label">Latitude</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" required>
-                        <div id="latitudeHelp" class="form-text">Insira a sua latitude.</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                            <label class="form-label">Latitude</label>
+                            <input type="text" class="form-control" id="latitude" name="latitude" required>
+                            <div id="latitudeHelp" class="form-text">Insira a sua latitude.</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                            <label class="form-label">Longitude</label>
+                            <input type="text" class="form-control" id="longitude" name="longitude" required>
+                            <div id="longitudeHelp" class="form-text">Insira a sua longitude.</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Longitude</label>
-                        <input type="text" class="form-control" id="longitude" name="longitude" required>
-                        <div id="longitudeHelp" class="form-text">Insira a sua longitude.</div>
-                    </div>
-                    <div class="mb-3">
-                        <select class="form-select" id="preferenceSearch" name="preferenceSearch" required>
-                            <option value="" selected>Preferência de busca</option>
-                            <option value="distance">Menor Distância</option>
-                            <option value="price">Menor Preço</option>
-                        </select>
-                        <div id="preferenceHelp" class="form-text">Selecione a sua preferência de busca.</div>
-                    </div>
-                    <div class="mb-3">
-                        <select class="form-select" id="qtdResult" name="qtdResult" required>
-                            <option value="" selected>Quantidade de Resultados</option>
-                            <option value="5"></option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="all">Todos</option>
-                        </select>
-                        <div id="qtdHelp" class="form-text">Selecione a quantidade de resultados da busca.</div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                            <select class="form-select" id="preferenceSearch" name="preferenceSearch" required>
+                                <option value="" selected>Preferência de Busca</option>
+                                <option value="distance">Menor Distância</option>
+                                <option value="price">Menor Preço</option>
+                            </select>
+                            <div id="preferenceHelp" class="form-text">Selecione a sua preferência de busca.</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                            <select class="form-select" id="qtdResult" name="qtdResult" required>
+                                <option value="" selected>Quantidade de Resultados</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="all">Todos</option>
+                            </select>
+                            <div id="qtdHelp" class="form-text">Selecione a quantidade de resultados da busca.</div>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Buscar</button>
                 </form>
                 @yield('result')
             </main>
-            <footer class="pt-5 my-5 text-muted border-top">
-                Created by Fábio Sala &copy; 2021
-            </footer>
         </div>
         <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     </body>
