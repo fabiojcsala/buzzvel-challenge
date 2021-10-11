@@ -23,7 +23,7 @@
                 </a>
             </header>
             <main>
-                <form method="post" action="{{ route('search.distance') }}">
+                <form method="post" action="{{ route('search') }}">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col">

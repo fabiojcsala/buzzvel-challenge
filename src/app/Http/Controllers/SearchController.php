@@ -44,13 +44,10 @@ class SearchController extends Controller
         $myObj = [];
 
         $allData = $this->jsonDecode();
-
-        // dd($allData);
-
-        // dd($allData[0]);
     
         for($i = 0; $i < count($allData); $i++) {
             if($allData[$i][1] != "" && $allData[$i][2] != "" && count($allData[$i]) < 5) {
+                
                 $myObj = [
                     "name" => $allData[$i][0],
                     "latitude" => $allData[$i][1],
@@ -63,38 +60,22 @@ class SearchController extends Controller
             }
         }
 
-        // dd($myArray);
-
         return $myArray;
     }
 
     public function home() {
-        $array = 0;
-
         return view('home.index', compact('array'));
     }
 
-    public function distance(Request $request) {
+    public function search(Request $request) {
         $dataForm = $request -> all();
 
-        // dd($dataForm);
-
         $array = $this->makeObject($dataForm['latitude'], $dataForm['longitude']);
-
-        // dd($array);
 
         usort($array, function ($a, $b) {
             return (($a['distance'] != $b['distance']) ? (($a['distance'] < $b['distance']) ? -1 : 1) : 0);
         });
 
-        // dd($array);
-
-        return view('search-result.index', compact('array'));
-    }
-
-    public function price($array) {
-        usort($array, function ($a, $b) {
-            return (($a[3] != $b[3]) ? (($a[3] < $b[3]) ? -1 : 1) : 0);
-        });
+        return view('search.index', compact('array'));
     }
 }
