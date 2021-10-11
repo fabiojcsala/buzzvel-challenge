@@ -13,3 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get  ('/',                      ['as' => 'home',            'uses' => 'SearchController@home']);
+Route::post ('/search/order/distance', ['as' => 'search.distance', 'uses' => 'SearchController@distance']);
+Route::get  ('/search/order/price',    ['as' => 'search.price',    'uses' => 'SearchController@price']);
