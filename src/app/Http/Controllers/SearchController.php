@@ -52,7 +52,7 @@ class SearchController extends Controller
                     "name" => $allData[$i][0],
                     "latitude" => $allData[$i][1],
                     "longitude" => $allData[$i][2],
-                    "price" => number_format($allData[$i][3], 2, ",", "."),
+                    "price" => number_format($allData[$i][3], 2, ".", ""),
                     "distance" => number_format(floatval($this->calcDistance($userLati, $userLong, $allData[$i][1], $allData[$i][2])), 3, '.', '')
                 ];
     
@@ -72,9 +72,15 @@ class SearchController extends Controller
 
         $array = $this->makeObject($dataForm['latitude'], $dataForm['longitude']);
 
-        usort($array, function ($a, $b) {
-            return (($a['distance'] != $b['distance']) ? (($a['distance'] < $b['distance']) ? -1 : 1) : 0);
-        });
+        if($dataForm['preferenceSearch'] == "distance") {
+            usort($array, function ($a, $b) {
+                return (($a['distance'] != $b['distance']) ? (($a['distance'] < $b['distance']) ? -1 : 1) : 0);
+            });
+        } else {
+            usort($array, function ($a, $b) {
+                return (($a['price'] != $b['price']) ? (($a['price'] < $b['price']) ? -1 : 1) : 0);
+            });
+        }
 
         return view('search.index', compact('array'));
     }
