@@ -11,11 +11,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($array as $data)
+            @foreach($resultArray as $index)
                 <tr>
-                    <td>{{ $data['name'] }}</td>
-                    <td>{{ $data['distance'] }} KM</td>
-                    <td>{{ $data['price'] }} €</td>
+                    <td>{{ $index['name'] }}</td>
+                    <td>{{ $index['distance'] }} KM</td>
+                    <td>{{ $index['price'] }} €</td>
                 </tr>
             @endforeach
         </tbody>

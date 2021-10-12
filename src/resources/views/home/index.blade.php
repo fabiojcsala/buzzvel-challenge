@@ -45,12 +45,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
-                            <select class="form-select" id="preferenceSearch" name="preferenceSearch" required>
-                                <option value="" selected>Preferência de Busca</option>
+                            <select class="form-select" id="orderBy" name="orderBy" required>
+                                <option value="" selected>Ordenar a Busca Por</option>
                                 <option value="distance">Menor Distância</option>
                                 <option value="price">Menor Preço</option>
                             </select>
-                            <div id="preferenceHelp" class="form-text">Selecione a sua preferência de busca.</div>
+                            <div id="orderByHelp" class="form-text">Selecione a ordem de busca.</div>
                             </div>
                         </div>
                         <div class="col">

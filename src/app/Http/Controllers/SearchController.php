@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | jsonDecode
+    |--------------------------------------------------------------------------
+    |
+    | O objetivo desta função quando solicitada é basicamente:
+    | acessar a API externa, obter os dados, armazená-los em um array
+    | e retorná-lo.
+    |
+    */
+
     function jsonDecode() {
         $ch = curl_init();
         
@@ -19,10 +30,23 @@ class SearchController extends Controller
         
         $result = json_decode($server_output);
         
-        $allData = $result->{'message'};
+        $dataJson = $result->{'message'};
         
-        return $allData;
+        return $dataJson;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | calcDistance
+    |--------------------------------------------------------------------------
+    |
+    | O objetivo desta função quando solicitada é basicamente:
+    | obter por parâmetro a latitude e longitude do usuário
+    | e a latitude e longitude do hotel cadastrado, efetuar o cálculo
+    | de distância entre duas geolocalidades baseadas nestes parâmetros,
+    | converter para a unidade "KM" e retorná-la.
+    |
+    */
 
     function calcDistance($lat1, $lon1, $lat2, $lon2) {
         $theta = ($lon1 - $lon2);
@@ -38,54 +62,115 @@ class SearchController extends Controller
         return floatval(($miles * 1.609344));
     }
 
-    function makeObject($userLati, $userLong) {
-        $myArray = [];
+    /*
+    |--------------------------------------------------------------------------
+    | getNearbyHotels
+    |--------------------------------------------------------------------------
+    |
+    | O objetivo desta função quando solicitada é basicamente:
+    | obter por parâmetro a latitude e longitude do usuário,
+    | solicitar os dados da API externa através da função jsonDecode,
+    | uma vez com o array contendo as informações dos hotéis cadastrados,
+    | executar um laço de repetição onde será:
+    | validado algumas informações como dados em branco (""),
+    | cada dado será organizado em um novo array denominado "hotel",
+    | e este novo array será adicionado a um outro array denominado "hoteis"
+    | e este retornado.
+    |
+    */
 
-        $myObj = [];
+    function getNearbyHotels($latitude, $longitude) {
+        $hotels = [];
+        $hotel = [];
 
-        $allData = $this->jsonDecode();
+        $dataJson = $this->jsonDecode();
     
-        for($i = 0; $i < count($allData); $i++) {
-            if($allData[$i][1] != "" && $allData[$i][2] != "" && count($allData[$i]) < 5) {
-
-                $myObj = [
-                    "name" => $allData[$i][0],
-                    "latitude" => $allData[$i][1],
-                    "longitude" => $allData[$i][2],
-                    "price" => number_format($allData[$i][3], 2, ".", ""),
-                    "distance" => number_format(floatval($this->calcDistance($userLati, $userLong, $allData[$i][1], $allData[$i][2])), 3, '.', '')
+        for($i = 0; $i < count($dataJson); $i++) {
+            if($dataJson[$i][1] != "" && $dataJson[$i][2] != "" && count($dataJson[$i]) < 5) {
+                $hotel = [
+                    "name" => $dataJson[$i][0],
+                    "latitude" => $dataJson[$i][1],
+                    "longitude" => $dataJson[$i][2],
+                    "price" => number_format($dataJson[$i][3], 2, ".", ""),
+                    "distance" => number_format(floatval($this->calcDistance($latitude, $longitude, $dataJson[$i][1], $dataJson[$i][2])), 3, '.', '')
                 ];
-    
-                array_push($myArray, $myObj);
+                array_push($hotels, $hotel);
             }
         }
-
-        return $myArray;
+        return $hotels;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | home
+    |--------------------------------------------------------------------------
+    |
+    | O objetivo desta função quando solicitada é basicamente:
+    | retornar a view principal do sistema.
+    |
+    */
 
     public function home() {
         return view('home.index');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | search
+    |--------------------------------------------------------------------------
+    |
+    | O objetivo desta função quando solicitada é basicamente:
+    | receber os dados do formulário de busca e oraganizá-los,
+    | obter o array com todas as informações dos hotéis necessárias,
+    | filtrá-las baseando-se na solicitação do usuário,
+    | e retornar a view com o resultado da pesquisa.
+    |
+    */
+
     public function search(Request $request) {
         $dataForm = $request -> all();
 
-        $array = $this->makeObject($dataForm['latitude'], $dataForm['longitude']);
+        $latitude = $dataForm['latitude'];
+        $longitude = $dataForm['longitude'];
 
-        usort($array, function ($a, $b) {
+        $qtdResult = $dataForm['qtdResult'];
+        $orderBy = $dataForm['orderBy'];
+
+        $resultArray = $this->getNearbyHotels($latitude, $longitude);
+
+        /*
+        |
+        | prioridade: filtrar os hotéis pela distância, ou seja, os mais próximos primeiro.
+        |
+        */
+
+        usort($resultArray, function ($a, $b) {
             return (($a['distance'] != $b['distance']) ? (($a['distance'] < $b['distance']) ? -1 : 1) : 0);
         });
 
-        if($dataForm['qtdResult'] != "all") {
-            $array = array_slice($array, 0, $dataForm['qtdResult']);
+        /*
+        |
+        |exibir apenas a quantidade solicitada pelo usuário.
+        |"all" = todos cadastrados
+        |
+        */
+
+        if($qtdResult != "all") {
+            $resultArray = array_slice($resultArray, 0, $dataForm['qtdResult']);
         }
 
-        if($dataForm['preferenceSearch'] == "price") {
-            usort($array, function ($a, $b) {
+        /*
+        |
+        |caso solicitado, ordenar por preço.
+        |
+        */
+
+        if($orderBy == "price") {
+            usort($resultArray, function ($a, $b) {
                 return (($a['price'] != $b['price']) ? (($a['price'] < $b['price']) ? -1 : 1) : 0);
             });
         }
 
-        return view('search.index', compact('array'));
+        return view('search.index', compact('resultArray'));
     }
 }
