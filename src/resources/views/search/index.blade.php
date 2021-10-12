@@ -1,7 +1,8 @@
 @extends ('home.index')
+
 @section ('result')
+    <h1 class="display-6">&nbsp;</h1>
     <table class="table caption-top">
-        <caption>Resultado</caption>
         <thead>
             <tr>
                 <th scope="col">Hotel</th>
