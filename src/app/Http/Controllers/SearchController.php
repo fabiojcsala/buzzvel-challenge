@@ -76,14 +76,14 @@ class SearchController extends Controller
             return (($a['distance'] != $b['distance']) ? (($a['distance'] < $b['distance']) ? -1 : 1) : 0);
         });
 
-        $array = array_slice($array, 0, $dataForm['qtdResult']);
+        if($dataForm['qtdResult'] != "all") {
+            $array = array_slice($array, 0, $dataForm['qtdResult']);
+        }
 
         if($dataForm['preferenceSearch'] == "price") {
             usort($array, function ($a, $b) {
                 return (($a['price'] != $b['price']) ? (($a['price'] < $b['price']) ? -1 : 1) : 0);
             });
-
-            $array = array_slice($array, 0, $dataForm['qtdResult']);
         }
 
         return view('search.index', compact('array'));
