@@ -55,6 +55,14 @@ php artisan key:generate
 exit
 ```
 
+- Talvez seja necessário dar permissão ao diretório do projeto para acessá-lo. Nisto utilize o comando:
+
+```
+sudo chmod -R 777 src/
+```
+
+**Lembrando que a permissão "777" é recomendada apenas em ambientes de testes ou desenvolvimento. Por questões de segurança esta não deve ser executada em ambientes de produção.**
+
 - Abra seu navegador de preferência e acesse o endereço:
 
 http://localhost/
