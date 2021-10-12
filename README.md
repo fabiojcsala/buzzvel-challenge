@@ -1,4 +1,4 @@
-# Buzzel Challenge
+# Buzzvel Challenge
 
 Resolução de um teste prático de avaliação de competências para a vaga de Programador Full-Stack Júnior.
 
